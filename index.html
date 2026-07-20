@@ -201,15 +201,14 @@
         if (w % 4 === 0) longRun = Math.round(longRun * 0.75);
       }
 
-      const rawTotal = phase === "Тейпер" ? longRun / 0.35 : longRun / 0.32;
-      const weeklyTotal = Math.min(Math.round(rawTotal), 95);
-      const remaining = Math.max(weeklyTotal - longRun, 15);
+      const rawTotal = phase === "Тейпер" ? longRun / 0.38 : longRun / 0.35;
+      const weeklyTotal = Math.min(Math.round(rawTotal), 90);
+      const remaining = Math.max(weeklyTotal - longRun, 12);
 
-      const monKm = Math.round(remaining * 0.2);
-      const tueKm = Math.round(remaining * 0.2);
+      const monKm = Math.round(remaining * 0.25);
+      const tueKm = Math.round(remaining * 0.25);
       const wedKm = Math.round(remaining * 0.2);
-      const thuKm = Math.round(remaining * 0.25);
-      const friKm = Math.round(remaining * 0.15);
+      const thuKm = Math.round(remaining * 0.3);
 
       let tueDesc, thuDesc;
       if (phase === "База") {
@@ -243,7 +242,7 @@
         { idx: 1, type: "interval", km: tueKm, desc: tueDesc },
         { idx: 2, type: "easy", km: wedKm, desc: `Лёгкий бег ${wedKm} км, темп ${easyStr}/км` },
         { idx: 3, type: "tempo", km: thuKm, desc: thuDesc },
-        { idx: 4, type: "easy", km: friKm, desc: `Лёгкий бег ${friKm} км, темп ${easyStr}/км` },
+        { idx: 4, type: "rest", km: 0, desc: "Отдых" },
         { idx: 5, type: "rest", km: 0, desc: "Отдых" },
         { idx: 6, type: isRaceWeek ? "race" : "long", km: isRaceWeek ? 42.2 : longRun, desc: sunDesc },
       ];
@@ -267,6 +266,7 @@
     const daysLeft = Math.round((raceDate - today) / (24 * 3600 * 1000));
     document.getElementById("summaryInfo").innerHTML =
       `До старта в Шанхае — <strong>${daysLeft} дней</strong> (~${weeksToRace} недель). ` +
+      `Будни (пн–чт) — утром до 8:00 или вечером после 19:00, пт и сб — отдых, длинная — вс. ` +
       `Рост ${cfg.heightCm} см, вес ${cfg.weightKg} кг — ориентир на длинных тренировках и гонке: ~500–750 мл жидкости и 60–90 г углеводов в час.`;
   }
 
