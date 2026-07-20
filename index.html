@@ -2,45 +2,139 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8" />
-<title>Workshop App</title>
+<title>Алматы → Шанхай: билеты команды</title>
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 480px; margin: 40px auto; }
-  input { padding: 8px; margin-right: 8px; }
-  button { padding: 8px 12px; }
-  li { margin: 8px 0; }
+  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; color: #1a1a1a; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .sub { color: #666; margin-top: 0; margin-bottom: 24px; }
+  fieldset { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 24px; }
+  legend { padding: 0 6px; font-weight: 600; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .row > div { display: flex; flex-direction: column; flex: 1; min-width: 140px; }
+  label { font-size: 12px; color: #555; margin-bottom: 4px; }
+  input, select { padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+  button { padding: 10px 16px; border: none; border-radius: 6px; background: #2563eb; color: white; font-size: 14px; cursor: pointer; }
+  button:hover { background: #1d4ed8; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-bottom: 16px; }
+  .filters > div { display: flex; flex-direction: column; }
+  .card { border: 1px solid #e2e2e2; border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; position: relative; }
+  .card h3 { margin: 0 0 6px 0; font-size: 16px; }
+  .price { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .meta { color: #444; font-size: 13px; margin: 4px 0; }
+  .stops-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+  .stops-0 { background: #dcfce7; color: #166534; }
+  .stops-1 { background: #fef9c3; color: #854d0e; }
+  .stops-2 { background: #fee2e2; color: #991b1b; }
+  .stars { color: #f59e0b; letter-spacing: 1px; }
+  .del { position: absolute; top: 10px; right: 10px; background: transparent; color: #999; padding: 2px 8px; font-size: 13px; }
+  .del:hover { color: #dc2626; background: transparent; }
+  .empty { color: #888; font-style: italic; }
 </style>
 </head>
 <body>
-  <h1>Workshop App</h1>
-  <p>Это заготовка. Claude заменит это на приложение под вашу идею —
-  здесь только базовый пример, чтобы показать, что подключение к базе
-  данных работает.</p>
+  <h1>Алматы → Шанхай</h1>
+  <p class="sub">Варианты билетов на 4–8 декабря 2026, которые нашла команда (4-5 человек). Добавляйте всё, что нашли — сравниваем по цене, пересадкам и авиакомпании.</p>
 
-  <input id="name" placeholder="название" />
-  <input id="note" placeholder="заметка (необязательно)" />
-  <button onclick="addItem()">Добавить</button>
+  <fieldset>
+    <legend>Добавить вариант</legend>
+    <div class="row">
+      <div>
+        <label>Ваше имя</label>
+        <input id="addedBy" placeholder="напр. Данияр" />
+      </div>
+      <div>
+        <label>Авиакомпания</label>
+        <input id="airline" placeholder="напр. Air Astana" />
+      </div>
+      <div>
+        <label>Цена, ₸</label>
+        <input id="price" type="number" min="0" placeholder="напр. 145000" />
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Дата вылета</label>
+        <input id="departDate" type="date" min="2026-12-04" max="2026-12-08" />
+      </div>
+      <div>
+        <label>Пересадки</label>
+        <select id="stops">
+          <option value="0">Прямой рейс</option>
+          <option value="1">1 пересадка</option>
+          <option value="2">2+ пересадки</option>
+        </select>
+      </div>
+      <div>
+        <label>Рейтинг авиакомпании</label>
+        <select id="rating">
+          <option value="5">★★★★★ отлично</option>
+          <option value="4">★★★★ хорошо</option>
+          <option value="3">★★★ нормально</option>
+          <option value="2">★★ так себе</option>
+          <option value="1">★ плохо</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Где и сколько стыковка (если есть)</label>
+        <input id="layoverInfo" placeholder="напр. Инчхон, 3ч 20мин" />
+      </div>
+      <div>
+        <label>Длительность пересадки, мин</label>
+        <input id="layoverMinutes" type="number" min="0" placeholder="0 если прямой" />
+      </div>
+      <div>
+        <label>Ссылка на билет (необязательно)</label>
+        <input id="link" placeholder="https://..." />
+      </div>
+    </div>
+    <button onclick="addFlight()">Добавить вариант</button>
+  </fieldset>
 
-  <ul id="list"></ul>
+  <div class="filters">
+    <div>
+      <label>Макс. цена, ₸</label>
+      <input id="filterMaxPrice" type="number" min="0" placeholder="без ограничения" oninput="render()" />
+    </div>
+    <div>
+      <label>Пересадки</label>
+      <select id="filterStops" onchange="render()">
+        <option value="all">Все</option>
+        <option value="0">Только прямые</option>
+        <option value="1">1 пересадка</option>
+        <option value="2">2+ пересадки</option>
+      </select>
+    </div>
+    <div>
+      <label>Сортировка</label>
+      <select id="sortBy" onchange="render()">
+        <option value="price_asc">Сначала дешёвые</option>
+        <option value="price_desc">Сначала дорогие</option>
+        <option value="layover_asc">Сначала удобные стыковки</option>
+        <option value="rating_desc">Сначала высокий рейтинг</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="list"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Filled in once for the whole workshop — same for every participant.
   const SUPABASE_URL = "https://ospzdrbiwlwvmrfjokee.supabase.co";
   const SUPABASE_KEY = "sb_publishable_IiTOhk0_H-y5KzC3qhRiBg_UMgFRnz8";
-
-  // IMPORTANT: Claude — generate a short random ID (e.g. 6 characters,
-  // letters+numbers) ONCE and hardcode it here. This keeps this
-  // participant's data separate from everyone else sharing the same
-  // Supabase project. Do not leave this as "REPLACE_ME".
   const PARTICIPANT_ID = "a3f9k2";
 
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  async function loadItems() {
+  let flights = [];
+
+  async function loadFlights() {
     const { data, error } = await client
       .from("workshop_data")
       .select("*")
       .eq("participant_id", PARTICIPANT_ID)
+      .eq("item_type", "flight")
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -48,24 +142,30 @@
       return;
     }
 
-    const list = document.getElementById("list");
-    list.innerHTML = "";
-    for (const row of data) {
-      const li = document.createElement("li");
-      li.textContent = `${row.data.name}${row.data.note ? " — " + row.data.note : ""}`;
-      list.appendChild(li);
-    }
+    flights = data;
+    render();
   }
 
-  async function addItem() {
-    const name = document.getElementById("name").value;
-    const note = document.getElementById("note").value;
-    if (!name) return;
+  async function addFlight() {
+    const addedBy = document.getElementById("addedBy").value.trim();
+    const airline = document.getElementById("airline").value.trim();
+    const price = parseFloat(document.getElementById("price").value);
+    const departDate = document.getElementById("departDate").value;
+    const stops = parseInt(document.getElementById("stops").value, 10);
+    const rating = parseInt(document.getElementById("rating").value, 10);
+    const layoverInfo = document.getElementById("layoverInfo").value.trim();
+    const layoverMinutes = parseInt(document.getElementById("layoverMinutes").value, 10) || 0;
+    const link = document.getElementById("link").value.trim();
+
+    if (!addedBy || !airline || !price) {
+      alert("Заполните хотя бы имя, авиакомпанию и цену");
+      return;
+    }
 
     const { error } = await client.from("workshop_data").insert({
       participant_id: PARTICIPANT_ID,
-      item_type: "item",
-      data: { name, note },
+      item_type: "flight",
+      data: { addedBy, airline, price, departDate, stops, rating, layoverInfo, layoverMinutes, link },
     });
 
     if (error) {
@@ -73,12 +173,72 @@
       return;
     }
 
-    document.getElementById("name").value = "";
-    document.getElementById("note").value = "";
-    loadItems();
+    ["addedBy", "airline", "price", "departDate", "layoverInfo", "layoverMinutes", "link"].forEach(
+      (id) => (document.getElementById(id).value = "")
+    );
+
+    loadFlights();
   }
 
-  loadItems();
+  async function deleteFlight(id) {
+    const { error } = await client.from("workshop_data").delete().eq("id", id);
+    if (error) {
+      console.error(error);
+      return;
+    }
+    loadFlights();
+  }
+
+  function render() {
+    const maxPrice = parseFloat(document.getElementById("filterMaxPrice").value);
+    const stopsFilter = document.getElementById("filterStops").value;
+    const sortBy = document.getElementById("sortBy").value;
+
+    let items = flights.filter((f) => {
+      if (!isNaN(maxPrice) && f.data.price > maxPrice) return false;
+      if (stopsFilter !== "all" && String(f.data.stops) !== stopsFilter) return false;
+      return true;
+    });
+
+    items.sort((a, b) => {
+      if (sortBy === "price_asc") return a.data.price - b.data.price;
+      if (sortBy === "price_desc") return b.data.price - a.data.price;
+      if (sortBy === "layover_asc") return (a.data.layoverMinutes || 0) - (b.data.layoverMinutes || 0);
+      if (sortBy === "rating_desc") return (b.data.rating || 0) - (a.data.rating || 0);
+      return 0;
+    });
+
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+
+    if (items.length === 0) {
+      list.innerHTML = '<p class="empty">Пока нет вариантов под эти фильтры.</p>';
+      return;
+    }
+
+    for (const f of items) {
+      const d = f.data;
+      const stopsLabel = d.stops === 0 ? "Прямой" : d.stops === 1 ? "1 пересадка" : "2+ пересадки";
+      const stars = "★".repeat(d.rating || 0) + "☆".repeat(5 - (d.rating || 0));
+
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <button class="del" onclick="deleteFlight('${f.id}')">✕ удалить</button>
+        <h3>${d.airline} <span class="price">${d.price.toLocaleString("ru-RU")} ₸</span></h3>
+        <div class="meta">
+          <span class="stops-badge stops-${d.stops}">${stopsLabel}</span>
+          ${d.stops > 0 && d.layoverInfo ? ` · ${d.layoverInfo}` : ""}
+          ${d.stops > 0 && d.layoverMinutes ? ` (${d.layoverMinutes} мин)` : ""}
+        </div>
+        <div class="meta">Вылет: ${d.departDate || "—"} · Рейтинг: <span class="stars">${stars}</span></div>
+        <div class="meta">Добавил(а): ${d.addedBy}${d.link ? ` · <a href="${d.link}" target="_blank">ссылка на билет</a>` : ""}</div>
+      `;
+      list.appendChild(card);
+    }
+  }
+
+  loadFlights();
 </script>
 </body>
 </html>
