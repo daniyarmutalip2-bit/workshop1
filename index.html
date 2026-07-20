@@ -2,9 +2,9 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8" />
-<title>Алматы → Шанхай: билеты команды</title>
+<title>Шанхай-2026: план на марафон из 2:50</title>
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; color: #1a1a1a; }
+  body { font-family: system-ui, sans-serif; max-width: 860px; margin: 40px auto; padding: 0 16px; color: #1a1a1a; }
   h1 { font-size: 22px; margin-bottom: 4px; }
   .sub { color: #666; margin-top: 0; margin-bottom: 24px; }
   fieldset { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 24px; }
@@ -15,109 +15,69 @@
   input, select { padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
   button { padding: 10px 16px; border: none; border-radius: 6px; background: #2563eb; color: white; font-size: 14px; cursor: pointer; }
   button:hover { background: #1d4ed8; }
-  .filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-bottom: 16px; }
-  .filters > div { display: flex; flex-direction: column; }
-  .card { border: 1px solid #e2e2e2; border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; position: relative; }
-  .card h3 { margin: 0 0 6px 0; font-size: 16px; }
-  .price { font-size: 20px; font-weight: 700; color: #2563eb; }
-  .meta { color: #444; font-size: 13px; margin: 4px 0; }
-  .stops-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; }
-  .stops-0 { background: #dcfce7; color: #166534; }
-  .stops-1 { background: #fef9c3; color: #854d0e; }
-  .stops-2 { background: #fee2e2; color: #991b1b; }
-  .stars { color: #f59e0b; letter-spacing: 1px; }
-  .del { position: absolute; top: 10px; right: 10px; background: transparent; color: #999; padding: 2px 8px; font-size: 13px; }
-  .del:hover { color: #dc2626; background: transparent; }
-  .empty { color: #888; font-style: italic; }
+  button.small { padding: 6px 10px; font-size: 12px; }
+  .paces { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+  .pace-card { border: 1px solid #e2e2e2; border-radius: 8px; padding: 10px 14px; flex: 1; min-width: 130px; }
+  .pace-card .label { font-size: 12px; color: #666; }
+  .pace-card .val { font-size: 18px; font-weight: 700; color: #2563eb; }
+  .info { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #1e3a8a; margin-bottom: 24px; }
+  details { border: 1px solid #e2e2e2; border-radius: 8px; margin-bottom: 10px; }
+  summary { cursor: pointer; padding: 12px 14px; font-weight: 600; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  .phase-tag { font-weight: 500; color: #666; font-size: 13px; margin-left: 6px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 6px 8px; border-top: 1px solid #eee; vertical-align: top; }
+  th { color: #666; font-weight: 500; font-size: 12px; }
+  .rest-row td { color: #999; font-style: italic; }
+  .actual-inputs { display: flex; gap: 4px; flex-wrap: wrap; }
+  .actual-inputs input { width: 60px; padding: 4px; font-size: 12px; }
+  .actual-inputs input.note { width: 120px; }
+  .done-yes { background: #f0fdf4; }
+  .race-row td { background: #fef9c3; font-weight: 600; }
 </style>
 </head>
 <body>
-  <h1>Алматы → Шанхай</h1>
-  <p class="sub">Варианты билетов на 4–8 декабря 2026, которые нашла команда (4-5 человек). Добавляйте всё, что нашли — сравниваем по цене, пересадкам и авиакомпании.</p>
+  <h1>Шанхайский марафон — план на 2:50</h1>
+  <p class="sub">Шанхайский марафон, 6 декабря 2026. Личный план, привязанный к вашим текущим результатам — план перестраивается от сегодняшней даты до старта.</p>
 
   <fieldset>
-    <legend>Добавить вариант</legend>
+    <legend>Мои данные</legend>
     <div class="row">
       <div>
-        <label>Ваше имя</label>
-        <input id="addedBy" placeholder="напр. Данияр" />
+        <label>10 км (мм:сс)</label>
+        <input id="cfgTen" placeholder="38:00" />
       </div>
       <div>
-        <label>Авиакомпания</label>
-        <input id="airline" placeholder="напр. Air Astana" />
+        <label>Полумарафон (ч:мм:сс)</label>
+        <input id="cfgHalf" placeholder="1:24:00" />
       </div>
       <div>
-        <label>Цена, ₸</label>
-        <input id="price" type="number" min="0" placeholder="напр. 145000" />
+        <label>Цель на марафон (ч:мм:сс)</label>
+        <input id="cfgGoal" placeholder="2:50:00" />
       </div>
     </div>
     <div class="row">
       <div>
-        <label>Дата вылета</label>
-        <input id="departDate" type="date" min="2026-12-04" max="2026-12-08" />
+        <label>Дата марафона</label>
+        <input id="cfgRaceDate" type="date" />
       </div>
       <div>
-        <label>Пересадки</label>
-        <select id="stops">
-          <option value="0">Прямой рейс</option>
-          <option value="1">1 пересадка</option>
-          <option value="2">2+ пересадки</option>
-        </select>
+        <label>Рост, см</label>
+        <input id="cfgHeight" type="number" placeholder="178" />
       </div>
       <div>
-        <label>Рейтинг авиакомпании</label>
-        <select id="rating">
-          <option value="5">★★★★★ отлично</option>
-          <option value="4">★★★★ хорошо</option>
-          <option value="3">★★★ нормально</option>
-          <option value="2">★★ так себе</option>
-          <option value="1">★ плохо</option>
-        </select>
+        <label>Вес, кг</label>
+        <input id="cfgWeight" type="number" placeholder="76" />
       </div>
     </div>
-    <div class="row">
-      <div>
-        <label>Где и сколько стыковка (если есть)</label>
-        <input id="layoverInfo" placeholder="напр. Инчхон, 3ч 20мин" />
-      </div>
-      <div>
-        <label>Длительность пересадки, мин</label>
-        <input id="layoverMinutes" type="number" min="0" placeholder="0 если прямой" />
-      </div>
-      <div>
-        <label>Ссылка на билет (необязательно)</label>
-        <input id="link" placeholder="https://..." />
-      </div>
-    </div>
-    <button onclick="addFlight()">Добавить вариант</button>
+    <button onclick="saveConfigAndBuild()">Сохранить и построить план</button>
   </fieldset>
 
-  <div class="filters">
-    <div>
-      <label>Макс. цена, ₸</label>
-      <input id="filterMaxPrice" type="number" min="0" placeholder="без ограничения" oninput="render()" />
-    </div>
-    <div>
-      <label>Пересадки</label>
-      <select id="filterStops" onchange="render()">
-        <option value="all">Все</option>
-        <option value="0">Только прямые</option>
-        <option value="1">1 пересадка</option>
-        <option value="2">2+ пересадки</option>
-      </select>
-    </div>
-    <div>
-      <label>Сортировка</label>
-      <select id="sortBy" onchange="render()">
-        <option value="price_asc">Сначала дешёвые</option>
-        <option value="price_desc">Сначала дорогие</option>
-        <option value="layover_asc">Сначала удобные стыковки</option>
-        <option value="rating_desc">Сначала высокий рейтинг</option>
-      </select>
-    </div>
-  </div>
+  <div id="summaryInfo" class="info"></div>
 
-  <div id="list"></div>
+  <div id="paces" class="paces"></div>
+
+  <div id="plan"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -127,118 +87,393 @@
 
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  let flights = [];
+  const DAY_NAMES = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
-  async function loadFlights() {
+  let config = {
+    tenKmSec: 38 * 60,
+    halfSec: 84 * 60,
+    goalSec: 170 * 60,
+    raceDate: "2026-12-06",
+    heightCm: 178,
+    weightKg: 76,
+  };
+  let configRowId = null;
+  let logsMap = {}; // key `${week}-${dayIndex}` -> {id, ...data}
+
+  function parseTime(str) {
+    const parts = str.trim().split(":").map((p) => parseInt(p, 10));
+    if (parts.some(isNaN)) return null;
+    if (parts.length === 2) return parts[0] * 60 + parts[1];
+    if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+    return null;
+  }
+
+  function fmtTime(totalSec) {
+    const h = Math.floor(totalSec / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = Math.round(totalSec % 60);
+    if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    return `${m}:${String(s).padStart(2, "0")}`;
+  }
+
+  function fmtPace(secPerKm) {
+    const m = Math.floor(secPerKm / 60);
+    const s = Math.round(secPerKm % 60);
+    return `${m}:${String(s).padStart(2, "0")}`;
+  }
+
+  function mondayOf(date) {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = day === 0 ? -6 : 1 - day;
+    d.setDate(d.getDate() + diff);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+  function isoDate(d) {
+    return d.toISOString().slice(0, 10);
+  }
+
+  function fmtDateShort(d) {
+    return `${String(d.getDate()).padStart(2, "0")}.${String(d.getMonth() + 1).padStart(2, "0")}`;
+  }
+
+  function computePaces(cfg) {
+    const tenKmPace = cfg.tenKmSec / 10;
+    const halfPace = cfg.halfSec / 21.0975;
+    const mpPace = cfg.goalSec / 42.195;
+    return {
+      tenKmPace,
+      halfPace,
+      mpPace,
+      easyLow: mpPace + 50,
+      easyHigh: mpPace + 90,
+      tempoLow: halfPace - 5,
+      tempoHigh: halfPace + 8,
+      intervalLow: tenKmPace - 15,
+      intervalHigh: tenKmPace - 5,
+    };
+  }
+
+  function buildPlan(cfg) {
+    const raceDate = new Date(cfg.raceDate + "T00:00:00");
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let weeksToRace = Math.ceil((raceDate - mondayOf(today)) / (7 * 24 * 3600 * 1000));
+    weeksToRace = Math.max(8, Math.min(weeksToRace, 26));
+
+    const taperWeeks = 2;
+    const peakWeeks = Math.max(2, Math.round(weeksToRace * 0.15));
+    const buildWeeks = Math.max(4, Math.round(weeksToRace * 0.35));
+    const baseWeeks = Math.max(1, weeksToRace - taperWeeks - peakWeeks - buildWeeks);
+    const buildupWeeks = baseWeeks + buildWeeks + peakWeeks;
+
+    const paces = computePaces(cfg);
+    const mpPaceStr = fmtPace(paces.mpPace);
+    const tempoStr = `${fmtPace(paces.tempoLow)}–${fmtPace(paces.tempoHigh)}`;
+    const intervalStr = `${fmtPace(paces.intervalLow)}–${fmtPace(paces.intervalHigh)}`;
+    const easyStr = `${fmtPace(paces.easyLow)}–${fmtPace(paces.easyHigh)}`;
+
+    const peakLong = 34;
+    const startLong = 15;
+
+    const startMonday = mondayOf(today);
+    const weeks = [];
+
+    for (let w = 1; w <= weeksToRace; w++) {
+      let phase;
+      if (w <= baseWeeks) phase = "База";
+      else if (w <= baseWeeks + buildWeeks) phase = "Развитие";
+      else if (w <= baseWeeks + buildWeeks + peakWeeks) phase = "Пик";
+      else phase = "Тейпер";
+
+      const isRaceWeek = w === weeksToRace;
+      let longRun;
+
+      if (phase === "Тейпер") {
+        longRun = isRaceWeek ? 8 : Math.round(peakLong * 0.6);
+      } else {
+        const weeksFromStart = w - 1;
+        const progressFrac = buildupWeeks > 1 ? Math.min(weeksFromStart / (buildupWeeks - 1), 1) : 1;
+        longRun = Math.round(startLong + (peakLong - startLong) * progressFrac);
+        if (w % 4 === 0) longRun = Math.round(longRun * 0.75);
+      }
+
+      const rawTotal = phase === "Тейпер" ? longRun / 0.35 : longRun / 0.32;
+      const weeklyTotal = Math.min(Math.round(rawTotal), 95);
+      const remaining = Math.max(weeklyTotal - longRun, 15);
+
+      const monKm = Math.round(remaining * 0.2);
+      const tueKm = Math.round(remaining * 0.2);
+      const wedKm = Math.round(remaining * 0.2);
+      const thuKm = Math.round(remaining * 0.25);
+      const friKm = Math.round(remaining * 0.15);
+
+      let tueDesc, thuDesc;
+      if (phase === "База") {
+        tueDesc = `Фартлек ${tueKm} км: 6×2 мин быстро / 2 мин трусцой`;
+        thuDesc = `Темповый бег: разминка + ${Math.max(thuKm - 4, 3)} км в темпе ${tempoStr}/км + заминка`;
+      } else if (phase === "Развитие") {
+        tueDesc = `Интервалы ${tueKm} км: 6–8×1000м в темпе ${intervalStr}/км, отдых 400м трусцой`;
+        thuDesc = `Темповый бег: разминка + ${Math.max(thuKm - 4, 4)} км в темпе ${tempoStr}/км + заминка`;
+      } else if (phase === "Пик") {
+        tueDesc = `Интервалы ${tueKm} км: 5×1000м на грани, отдых 400м трусцой`;
+        thuDesc = `Темповый бег ${thuKm} км, из них 8–10 км в темпе ${tempoStr}/км`;
+      } else {
+        tueDesc = isRaceWeek ? `Лёгкие ускорения ${tueKm} км: 4×100м` : `Короткие интервалы ${tueKm} км: 4×400м в темпе 10км`;
+        thuDesc = isRaceWeek ? `Лёгкий бег ${thuKm} км + 3×100м ускорения` : `Темповый бег ${thuKm} км, 5 км в темпе ${tempoStr}/км`;
+      }
+
+      let sunDesc;
+      if (isRaceWeek) {
+        sunDesc = `ГОНКА: Шанхайский марафон, 42.2 км. Целевой темп ${mpPaceStr}/км, финиш из ${fmtTime(cfg.goalSec)}`;
+      } else if (phase === "Пик" || phase === "Развитие") {
+        sunDesc = `Длинный бег ${longRun} км, последние 6–8 км в темпе марафона (${mpPaceStr}/км)`;
+      } else {
+        sunDesc = `Длинный бег ${longRun} км в спокойном темпе (${easyStr}/км)`;
+      }
+
+      const monday = new Date(startMonday);
+      monday.setDate(monday.getDate() + (w - 1) * 7);
+
+      const dayDefs = [
+        { idx: 0, type: "easy", km: monKm, desc: `Лёгкий бег ${monKm} км, темп ${easyStr}/км` },
+        { idx: 1, type: "interval", km: tueKm, desc: tueDesc },
+        { idx: 2, type: "easy", km: wedKm, desc: `Лёгкий бег ${wedKm} км, темп ${easyStr}/км` },
+        { idx: 3, type: "tempo", km: thuKm, desc: thuDesc },
+        { idx: 4, type: "easy", km: friKm, desc: `Лёгкий бег ${friKm} км, темп ${easyStr}/км` },
+        { idx: 5, type: "rest", km: 0, desc: "Отдых" },
+        { idx: 6, type: isRaceWeek ? "race" : "long", km: isRaceWeek ? 42.2 : longRun, desc: sunDesc },
+      ];
+
+      const days = dayDefs.map((d) => {
+        const date = new Date(monday);
+        date.setDate(date.getDate() + d.idx);
+        return { ...d, dayName: DAY_NAMES[d.idx], date: isoDate(date), dateShort: fmtDateShort(date) };
+      });
+
+      weeks.push({ week: w, phase, weeklyTotal, longRun, days, isRaceWeek });
+    }
+
+    return { weeks, weeksToRace, paces };
+  }
+
+  function renderSummary(cfg, weeksToRace) {
+    const raceDate = new Date(cfg.raceDate + "T00:00:00");
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const daysLeft = Math.round((raceDate - today) / (24 * 3600 * 1000));
+    document.getElementById("summaryInfo").innerHTML =
+      `До старта в Шанхае — <strong>${daysLeft} дней</strong> (~${weeksToRace} недель). ` +
+      `Рост ${cfg.heightCm} см, вес ${cfg.weightKg} кг — ориентир на длинных тренировках и гонке: ~500–750 мл жидкости и 60–90 г углеводов в час.`;
+  }
+
+  function renderPaces(paces) {
+    const cards = [
+      ["Марафонский темп (цель)", fmtPace(paces.mpPace)],
+      ["Лёгкий бег", `${fmtPace(paces.easyLow)}–${fmtPace(paces.easyHigh)}`],
+      ["Темповый бег", `${fmtPace(paces.tempoLow)}–${fmtPace(paces.tempoHigh)}`],
+      ["Интервалы (1000м)", `${fmtPace(paces.intervalLow)}–${fmtPace(paces.intervalHigh)}`],
+    ];
+    document.getElementById("paces").innerHTML = cards
+      .map(([label, val]) => `<div class="pace-card"><div class="label">${label}</div><div class="val">${val}/км</div></div>`)
+      .join("");
+  }
+
+  function renderPlan(weeks) {
+    const el = document.getElementById("plan");
+    el.innerHTML = "";
+
+    weeks.forEach((wk) => {
+      const details = document.createElement("details");
+      if (wk.week === 1) details.open = true;
+
+      const summary = document.createElement("summary");
+      summary.innerHTML = `Неделя ${wk.week} (${wk.days[0].dateShort}–${wk.days[6].dateShort})<span class="phase-tag">${wk.phase} · ${wk.weeklyTotal} км</span>`;
+      details.appendChild(summary);
+
+      const table = document.createElement("table");
+      table.innerHTML = `
+        <thead>
+          <tr><th>День</th><th>Дата</th><th>Тренировка</th><th>Выполнено</th><th>Факт</th></tr>
+        </thead>
+        <tbody></tbody>
+      `;
+      const tbody = table.querySelector("tbody");
+
+      wk.days.forEach((day) => {
+        const tr = document.createElement("tr");
+        if (day.type === "rest") {
+          tr.className = "rest-row";
+          tr.innerHTML = `<td>${day.dayName}</td><td>${day.dateShort}</td><td colspan="3">Отдых</td>`;
+          tbody.appendChild(tr);
+          return;
+        }
+        if (day.type === "race") tr.className = "race-row";
+
+        const key = `${wk.week}-${day.idx}`;
+        const saved = logsMap[key] || {};
+        const inputId = `log-${wk.week}-${day.idx}`;
+
+        if (saved.done) tr.classList.add("done-yes");
+
+        tr.innerHTML = `
+          <td>${day.dayName}</td>
+          <td>${day.dateShort}</td>
+          <td>${day.desc}</td>
+          <td><input type="checkbox" id="${inputId}-done" ${saved.done ? "checked" : ""} /></td>
+          <td>
+            <div class="actual-inputs">
+              <input type="number" step="0.1" id="${inputId}-km" placeholder="км" value="${saved.actualKm ?? ""}" />
+              <input type="number" id="${inputId}-min" placeholder="мин" value="${saved.actualMinutes ?? ""}" />
+              <input type="text" class="note" id="${inputId}-note" placeholder="заметка" value="${saved.notes ?? ""}" />
+              <button class="small" onclick="saveLog(${wk.week}, ${day.idx}, '${day.type}', ${day.km}, '${day.desc.replace(/'/g, "\\'")}', '${day.date}')">Сохранить</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      details.appendChild(table);
+      el.appendChild(details);
+    });
+  }
+
+  async function loadConfig() {
     const { data, error } = await client
       .from("workshop_data")
       .select("*")
       .eq("participant_id", PARTICIPANT_ID)
-      .eq("item_type", "flight")
-      .order("created_at", { ascending: false });
+      .eq("item_type", "config")
+      .limit(1);
 
     if (error) {
       console.error(error);
       return;
     }
+    if (data && data.length > 0) {
+      configRowId = data[0].id;
+      config = { ...config, ...data[0].data };
+    }
 
-    flights = data;
-    render();
+    document.getElementById("cfgTen").value = fmtTime(config.tenKmSec);
+    document.getElementById("cfgHalf").value = fmtTime(config.halfSec);
+    document.getElementById("cfgGoal").value = fmtTime(config.goalSec);
+    document.getElementById("cfgRaceDate").value = config.raceDate;
+    document.getElementById("cfgHeight").value = config.heightCm;
+    document.getElementById("cfgWeight").value = config.weightKg;
   }
 
-  async function addFlight() {
-    const addedBy = document.getElementById("addedBy").value.trim();
-    const airline = document.getElementById("airline").value.trim();
-    const price = parseFloat(document.getElementById("price").value);
-    const departDate = document.getElementById("departDate").value;
-    const stops = parseInt(document.getElementById("stops").value, 10);
-    const rating = parseInt(document.getElementById("rating").value, 10);
-    const layoverInfo = document.getElementById("layoverInfo").value.trim();
-    const layoverMinutes = parseInt(document.getElementById("layoverMinutes").value, 10) || 0;
-    const link = document.getElementById("link").value.trim();
+  async function saveConfigAndBuild() {
+    const tenKmSec = parseTime(document.getElementById("cfgTen").value);
+    const halfSec = parseTime(document.getElementById("cfgHalf").value);
+    const goalSec = parseTime(document.getElementById("cfgGoal").value);
+    const raceDate = document.getElementById("cfgRaceDate").value;
+    const heightCm = parseInt(document.getElementById("cfgHeight").value, 10);
+    const weightKg = parseInt(document.getElementById("cfgWeight").value, 10);
 
-    if (!addedBy || !airline || !price) {
-      alert("Заполните хотя бы имя, авиакомпанию и цену");
+    if (!tenKmSec || !halfSec || !goalSec || !raceDate) {
+      alert("Проверьте формат времени: мм:сс для 10км, ч:мм:сс для остального");
       return;
     }
 
-    const { error } = await client.from("workshop_data").insert({
-      participant_id: PARTICIPANT_ID,
-      item_type: "flight",
-      data: { addedBy, airline, price, departDate, stops, rating, layoverInfo, layoverMinutes, link },
-    });
+    config = { tenKmSec, halfSec, goalSec, raceDate, heightCm, weightKg };
+
+    if (configRowId) {
+      const { error } = await client.from("workshop_data").update({ data: config }).eq("id", configRowId);
+      if (error) console.error(error);
+    } else {
+      const { data, error } = await client
+        .from("workshop_data")
+        .insert({ participant_id: PARTICIPANT_ID, item_type: "config", data: config })
+        .select();
+      if (error) console.error(error);
+      else if (data && data[0]) configRowId = data[0].id;
+    }
+
+    buildAndRender();
+  }
+
+  async function loadLogs() {
+    const { data, error } = await client
+      .from("workshop_data")
+      .select("*")
+      .eq("participant_id", PARTICIPANT_ID)
+      .eq("item_type", "workout");
 
     if (error) {
       console.error(error);
       return;
     }
-
-    ["addedBy", "airline", "price", "departDate", "layoverInfo", "layoverMinutes", "link"].forEach(
-      (id) => (document.getElementById(id).value = "")
-    );
-
-    loadFlights();
-  }
-
-  async function deleteFlight(id) {
-    const { error } = await client.from("workshop_data").delete().eq("id", id);
-    if (error) {
-      console.error(error);
-      return;
-    }
-    loadFlights();
-  }
-
-  function render() {
-    const maxPrice = parseFloat(document.getElementById("filterMaxPrice").value);
-    const stopsFilter = document.getElementById("filterStops").value;
-    const sortBy = document.getElementById("sortBy").value;
-
-    let items = flights.filter((f) => {
-      if (!isNaN(maxPrice) && f.data.price > maxPrice) return false;
-      if (stopsFilter !== "all" && String(f.data.stops) !== stopsFilter) return false;
-      return true;
+    logsMap = {};
+    (data || []).forEach((row) => {
+      const key = `${row.data.weekNum}-${row.data.dayIndex}`;
+      logsMap[key] = { id: row.id, ...row.data };
     });
-
-    items.sort((a, b) => {
-      if (sortBy === "price_asc") return a.data.price - b.data.price;
-      if (sortBy === "price_desc") return b.data.price - a.data.price;
-      if (sortBy === "layover_asc") return (a.data.layoverMinutes || 0) - (b.data.layoverMinutes || 0);
-      if (sortBy === "rating_desc") return (b.data.rating || 0) - (a.data.rating || 0);
-      return 0;
-    });
-
-    const list = document.getElementById("list");
-    list.innerHTML = "";
-
-    if (items.length === 0) {
-      list.innerHTML = '<p class="empty">Пока нет вариантов под эти фильтры.</p>';
-      return;
-    }
-
-    for (const f of items) {
-      const d = f.data;
-      const stopsLabel = d.stops === 0 ? "Прямой" : d.stops === 1 ? "1 пересадка" : "2+ пересадки";
-      const stars = "★".repeat(d.rating || 0) + "☆".repeat(5 - (d.rating || 0));
-
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <button class="del" onclick="deleteFlight('${f.id}')">✕ удалить</button>
-        <h3>${d.airline} <span class="price">${d.price.toLocaleString("ru-RU")} ₸</span></h3>
-        <div class="meta">
-          <span class="stops-badge stops-${d.stops}">${stopsLabel}</span>
-          ${d.stops > 0 && d.layoverInfo ? ` · ${d.layoverInfo}` : ""}
-          ${d.stops > 0 && d.layoverMinutes ? ` (${d.layoverMinutes} мин)` : ""}
-        </div>
-        <div class="meta">Вылет: ${d.departDate || "—"} · Рейтинг: <span class="stars">${stars}</span></div>
-        <div class="meta">Добавил(а): ${d.addedBy}${d.link ? ` · <a href="${d.link}" target="_blank">ссылка на билет</a>` : ""}</div>
-      `;
-      list.appendChild(card);
-    }
   }
 
-  loadFlights();
+  async function saveLog(week, dayIndex, type, plannedKm, plannedDesc, date) {
+    const inputId = `log-${week}-${dayIndex}`;
+    const done = document.getElementById(`${inputId}-done`).checked;
+    const actualKm = parseFloat(document.getElementById(`${inputId}-km`).value) || null;
+    const actualMinutes = parseFloat(document.getElementById(`${inputId}-min`).value) || null;
+    const notes = document.getElementById(`${inputId}-note`).value.trim();
+
+    const payload = {
+      weekNum: week,
+      dayIndex,
+      type,
+      plannedKm,
+      plannedDesc,
+      date,
+      done,
+      actualKm,
+      actualMinutes,
+      notes,
+    };
+
+    const key = `${week}-${dayIndex}`;
+    const existing = logsMap[key];
+
+    if (existing && existing.id) {
+      const { error } = await client.from("workshop_data").update({ data: payload }).eq("id", existing.id);
+      if (error) {
+        console.error(error);
+        return;
+      }
+      logsMap[key] = { id: existing.id, ...payload };
+    } else {
+      const { data, error } = await client
+        .from("workshop_data")
+        .insert({ participant_id: PARTICIPANT_ID, item_type: "workout", data: payload })
+        .select();
+      if (error) {
+        console.error(error);
+        return;
+      }
+      logsMap[key] = { id: data[0].id, ...payload };
+    }
+
+    const row = document.getElementById(`${inputId}-done`).closest("tr");
+    row.classList.toggle("done-yes", done);
+  }
+
+  function buildAndRender() {
+    const { weeks, weeksToRace, paces } = buildPlan(config);
+    renderSummary(config, weeksToRace);
+    renderPaces(paces);
+    renderPlan(weeks);
+  }
+
+  async function init() {
+    await loadConfig();
+    await loadLogs();
+    buildAndRender();
+  }
+
+  init();
 </script>
 </body>
 </html>
